@@ -72,7 +72,7 @@ options:
 # Values prefixed with an underscore (_) are user-defined.
 substitutions:
   # Prefix for all resource names.
-  _NAME_PREFIX: 'cap-iac-accel'
+  _NAME_PREFIX: 'iac-accel'
 
   # Deployment environment.
   _ENVIRONMENT: 'test'
