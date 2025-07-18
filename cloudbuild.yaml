@@ -1,0 +1,91 @@
+steps:
+  # 1. Initialize Terraform.
+  # This step initializes the working directory, downloading provider plugins
+  # and configuring the backend. Using a specific version is a best practice.
+  - name: 'hashicorp/terraform:1.8.0'
+    entrypoint: 'terraform'
+    args:
+      - 'init'
+      - '-backend-config=bucket=${_TERRAFORM_STATE_BUCKET}'
+    id: 'Terraform Init'
+
+  # 2. Validate Terraform Configuration.
+  # Checks if the configuration is syntactically valid and internally consistent.
+  - name: 'hashicorp/terraform:1.8.0'
+    entrypoint: 'terraform'
+    args: ['validate']
+    id: 'Terraform Validate'
+    waitFor: ['Terraform Init']
+
+  # 3. Create Terraform Plan.
+  # Creates an execution plan, which is saved to the 'tfplan' file.
+  # This plan outlines the changes Terraform will make to the infrastructure.
+  # Variables are passed to Terraform using '-var'.
+  # - 'project_id' uses a built-in substitution from Cloud Build.
+  # - Other variables like '_REGION' are defined in the 'substitutions' section below.
+  - name: 'hashicorp/terraform:1.8.0'
+    entrypoint: 'terraform'
+    args:
+      - 'plan'
+      - '-out=tfplan'
+      - '-var=project_id=${PROJECT_ID}'
+      - '-var=name_prefix=${_NAME_PREFIX}'
+      - '-var=region=${_REGION}'
+      - '-var=environment=${_ENVIRONMENT}'
+    id: 'Terraform Plan'
+    waitFor: ['Terraform Validate']
+
+  # 4. Apply Terraform Plan.
+  # Applies the changes defined in the 'tfplan' file to the target project.
+  # The '-auto-approve' flag is used for non-interactive execution in a CI/CD pipeline.
+  # Note: The Cloud Build service account ([PROJECT_NUMBER]@cloudbuild.gserviceaccount.com)
+  # must have the necessary IAM roles (e.g., Project Editor, or more specific roles like
+  # Pub/Sub Admin, Storage Admin) on the target project to manage resources.
+  - name: 'hashicorp/terraform:1.8.0'
+    entrypoint: 'terraform'
+    args:
+      - 'apply'
+      - '-auto-approve'
+      - '-input=false'
+      - 'tfplan'
+    id: 'Terraform Apply'
+    waitFor: ['Terraform Plan']
+
+# Store the Terraform plan file as a build artifact for auditing and manual review.
+# This is a best practice for infrastructure as code pipelines.
+# The Cloud Build service account requires the 'Storage Object Creator' role
+# on the artifacts bucket defined in the substitutions.
+artifacts:
+  objects:
+    # The location for storing artifacts.
+    # It's recommended to use a dedicated GCS bucket for Cloud Build artifacts.
+    location: 'gs://${_CLOUDBUILD_ARTIFACTS_BUCKET}/terraform'
+    paths: ['tfplan']
+
+# Set a timeout for the build
+timeout: '1800s' # 30 minutes
+options:
+      logging: CLOUD_LOGGING_ONLY
+
+# Substitutions allow for parameterizing the build.
+# These values can be provided at build time or defined in a Cloud Build trigger.
+# Values prefixed with an underscore (_) are user-defined.
+substitutions:
+  # Prefix for all resource names.
+  _NAME_PREFIX: 'cap-iac-accel'
+
+  # Deployment environment.
+  _ENVIRONMENT: 'test'
+
+  # Default GCP region for resource deployment. Can be overridden.
+  _REGION: 'us-central1'
+
+  # GCS bucket for storing build artifacts like the Terraform plan.
+  # IMPORTANT: This bucket must exist before running the build, and the
+  # Cloud Build service account needs write permissions (roles/storage.objectCreator).
+  _CLOUDBUILD_ARTIFACTS_BUCKET: 'capgemini-accelerator-tfartifacts'
+
+  # GCS bucket for storing the Terraform state file.
+  # IMPORTANT: This bucket must exist before running the build. It's recommended
+  # to enable Object Versioning on this bucket to protect against state corruption.
+  _TERRAFORM_STATE_BUCKET: 'capgemini-accelerator-tfstate'

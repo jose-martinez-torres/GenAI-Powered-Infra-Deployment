@@ -1,0 +1,32 @@
+[
+  {
+    "name": "data",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "The message data from Pub/Sub."
+  },
+  {
+    "name": "subscription_name",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "The name of the subscription that the message was received from."
+  },
+  {
+    "name": "message_id",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "ID of the message, assigned by the server."
+  },
+  {
+    "name": "publish_time",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE",
+    "description": "The time at which the message was published."
+  },
+  {
+    "name": "attributes",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "A JSON string of the message's attributes."
+  }
+]
