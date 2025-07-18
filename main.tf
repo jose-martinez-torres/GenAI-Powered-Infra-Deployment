@@ -35,7 +35,7 @@ locals {
 # A global Pub/Sub topic logically associated with the primary region.
 # While topics are global, subscriptions to services like BigQuery are regional.
 resource "google_pubsub_topic" "primary_topic" {
-  name   = "${local.resource_prefix}-topic"
+  name   = "${local.resource_prefix}-primary-topic"
   labels = {
     environment = var.environment
   }
@@ -80,8 +80,8 @@ resource "google_compute_subnetwork" "gke_subnet" {
 module "bigquery_primary" {
   source     = "./modules/bigquery"
   location   = var.region
-  dataset_id = "${local.bq_resource_prefix}_ds"
-  table_id   = "${local.bq_resource_prefix}_tbl"
+  dataset_id = "${local.bq_resource_prefix}_primary_dataset"
+  table_id   = "${local.bq_resource_prefix}_primary_table"
   schema     = file("${path.module}/schemas/bq_pubsub_schema.json")
 }
 
