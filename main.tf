@@ -142,6 +142,18 @@ resource "google_storage_bucket" "coldline" {
   force_destroy = var.allow_bucket_force_destroy
 }
 
+# --- Serverless Resources ---
+
+# Creates a Cloud Function (2nd Gen) which runs on Cloud Run.
+module "cloud_run_function" {
+  source             = "./modules/cloudrun"
+  service_name       = "${local.resource_prefix}-function"
+  location           = var.region
+  source_bucket_name = var.function_source_bucket_name
+  source_object_name = "sample-cloudrun-source-code.zip"
+  # The runtime and entry_point are using the defaults from the module.
+}
+
 
 # --- Outputs ---
 
@@ -163,4 +175,9 @@ output "coldline_bucket_url" {
 output "gke_cluster_name" {
   description = "The name of the primary GKE cluster."
   value       = module.gke_primary.cluster_name
+}
+
+output "cloud_function_url" {
+  description = "The URL of the Cloud Function."
+  value       = module.cloud_run_function.function_url
 }

@@ -50,3 +50,8 @@ variable "gke_deletion_protection" {
   type        = bool
   default     = false # Set to false for dev/test environments to allow easy recreation.
 }
+
+variable "function_source_bucket_name" {
+  description = "The name of the GCS bucket where the function's source code zip is stored. This bucket must be created manually."
+  type        = string
+}

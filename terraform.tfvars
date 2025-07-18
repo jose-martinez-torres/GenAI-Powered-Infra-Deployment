@@ -3,3 +3,4 @@
 
 project_id        = "gcp-agent-garden"
 region            = "us-central1"
+function_source_bucket_name = "iac-accel-test-function-source"
