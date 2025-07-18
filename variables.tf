@@ -1,7 +1,7 @@
 variable "name_prefix" {
   description = "A prefix used to name all resources (e.g., 'cap-iac')."
   type        = string
-  default     = "cap-iac-accel" # Shortened to avoid hitting name length limits
+  default     = "iac-accel" # Shortened to avoid hitting name length limits
 }
 
 variable "environment" {
