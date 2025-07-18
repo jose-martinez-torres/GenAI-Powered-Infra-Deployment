@@ -83,9 +83,9 @@ substitutions:
   # GCS bucket for storing build artifacts like the Terraform plan.
   # IMPORTANT: This bucket must exist before running the build, and the
   # Cloud Build service account needs write permissions (roles/storage.objectCreator).
-  _CLOUDBUILD_ARTIFACTS_BUCKET: 'capgemini-accelerator-tfartifacts'
+  _CLOUDBUILD_ARTIFACTS_BUCKET: 'iac-accel-tfartifacts'
 
   # GCS bucket for storing the Terraform state file.
   # IMPORTANT: This bucket must exist before running the build. It's recommended
   # to enable Object Versioning on this bucket to protect against state corruption.
-  _TERRAFORM_STATE_BUCKET: 'capgemini-accelerator-tfstate'
+  _TERRAFORM_STATE_BUCKET: 'iac-accel-tfstate'

@@ -4,7 +4,7 @@ terraform {
   # Configure the GCS backend for storing Terraform state remotely.
   # This is crucial for team collaboration and state locking.
   backend "gcs" {
-    bucket = "capgemini-accelerator-tfstate"
+    bucket = "iac-accel-tfstate"
     prefix = "gcp-sample/terraform.tfstate"
   }
 
@@ -85,15 +85,6 @@ module "bigquery_primary" {
   schema     = file("${path.module}/schemas/bq_pubsub_schema.json")
 }
 
-# Creates a Cloud Function (Gen2) in the primary region.
-module "cloud_run_primary" {
-  source                = "./modules/cloudrun"
-  location              = var.region
-  service_name          = "${local.resource_prefix}-function"
-  source_bucket_name    = var.function_source_bucket_name
-  source_object_name    = var.function_source_object_name
-}
-
 # Creates a Pub/Sub subscription to push messages to BigQuery
 # for the primary region using a reusable module.
 module "pub_sub_primary" {
@@ -167,11 +158,6 @@ output "nearline_bucket_url" {
 output "coldline_bucket_url" {
   description = "The URL of the Coldline storage bucket."
   value       = google_storage_bucket.coldline.url
-}
-
-output "cloud_function_primary_url" {
-  description = "The URL of the primary Cloud Function."
-  value       = module.cloud_run_primary.function_url
 }
 
 output "gke_cluster_name" {

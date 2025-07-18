@@ -21,18 +21,6 @@ variable "region" {
   default     = "us-central1"
 }
 
-variable "function_source_bucket_name" {
-  description = "The GCS bucket where the function's source code zip is stored."
-  type        = string
-  default     = "capgemini-accelerator-tfstate"
-}
-
-variable "function_source_object_name" {
-  description = "The object name of the function's source code zip."
-  type        = string
-  default     = "sample-cloudrun-source-code/source.zip"
-}
-
 variable "allow_bucket_force_destroy" {
   description = "A flag to allow destroying GCS buckets even if they contain objects. Should be false in production."
   type        = bool
