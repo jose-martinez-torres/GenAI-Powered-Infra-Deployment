@@ -1,5 +1,5 @@
 resource "google_cloudfunctions2_function" "default" {
-  name     = var.service_name
+  name     = var.function_name
   location = var.location
 
   build_config {

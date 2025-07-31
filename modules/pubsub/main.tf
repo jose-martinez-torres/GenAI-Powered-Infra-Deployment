@@ -35,6 +35,6 @@ resource "google_bigquery_table_iam_member" "pubsub_to_bq_writer" {
   project    = local.bq_table_details[0]
   dataset_id = local.bq_table_details[1]
   table_id   = local.bq_table_details[2]
-  role       = "roles/bigquery.dataEditor"
+  role       = "roles/bigquery.dataInserter"
   member     = "serviceAccount:service-${data.google_project.project.number}@gcp-sa-pubsub.iam.gserviceaccount.com"
 }

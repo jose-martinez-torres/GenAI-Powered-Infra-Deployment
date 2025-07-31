@@ -15,6 +15,6 @@ variable "topic" {
 }
 
 variable "bigquery_table_id" {
-  description = "The full ID of the BigQuery table for the BQ subscription (e.g. projects/p/datasets/d/tables/t)."
+  description = "The full ID of the BigQuery table for the BQ subscription in the format 'project:dataset.table'."
   type        = string
 }

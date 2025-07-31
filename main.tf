@@ -147,7 +147,7 @@ resource "google_storage_bucket" "coldline" {
 # Creates a Cloud Function (2nd Gen) which runs on Cloud Run.
 module "cloud_run_function" {
   source             = "./modules/cloudrun"
-  service_name       = "${local.resource_prefix}-function"
+  function_name      = "${local.resource_prefix}-function"
   location           = var.region
   source_bucket_name = var.function_source_bucket_name
   source_object_name = "source.zip"

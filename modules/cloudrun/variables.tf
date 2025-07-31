@@ -3,8 +3,8 @@ variable "location" {
   type        = string
 }
 
-variable "service_name" {
-  description = "The name of the Cloud Run service."
+variable "function_name" {
+  description = "The name of the Cloud Function."
   type        = string
 }
 
