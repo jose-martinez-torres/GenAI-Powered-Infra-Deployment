@@ -150,7 +150,7 @@ module "cloud_run_function" {
   service_name       = "${local.resource_prefix}-function"
   location           = var.region
   source_bucket_name = var.function_source_bucket_name
-  source_object_name = "sample-cloudrun-source-code.zip"
+  source_object_name = "source.zip"
   # The runtime and entry_point are using the defaults from the module.
 }
 
